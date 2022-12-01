@@ -4,7 +4,7 @@ import Data.List
 
 main = do
 	input <- readFile "01_input.txt"
-	print (foldr1 (max) (map sum (map (map toInt) (map (delete "") (groupBy (\x y -> not (null y)) (lines input))))))
-
-toInt :: String -> Int
-toInt = read
+	-- part 1
+	print (maximum (map (sum . (map read) . (delete "")) (groupBy (\x y -> not (null y)) (lines input))))
+	-- part 2
+	print (sum (take 3 (sortBy (flip compare) (map (sum . (map read) . (delete "")) (groupBy (\x y -> not (null y)) (lines input))))))
