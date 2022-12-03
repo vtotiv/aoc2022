@@ -24,6 +24,6 @@ evalWin s
 
 replace :: String -> String
 replace s
-	| ((last s) == 'X') = (head s) : (chr (((ord (head s)) `mod` 3) + 88)) : []
-	| ((last s) == 'Y') = (head s) : (chr ((ord (head s)) + 23)) : []
-	| otherwise   		= (head s) : (chr ((((ord (head s)) - 64) `mod` 3) + 88)) : []
+	| (last s) == 'X' = head s : (chr $ ord (head s) `mod` 3 + 88) : []
+	| (last s) == 'Y' = head s : (chr $ ord (head s) + 23) : []
+	| otherwise   	  = head s : (chr $ (ord (head s) - 64) `mod` 3 + 88) : []
