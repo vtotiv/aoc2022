@@ -11,27 +11,27 @@ main = do
 	let (stack, moves) = parseInput (lines input)
 
 	-- part 1
-	print $ foldr (\x y -> [(head x)] ++ y) "" $ foldl (\x y -> applyMove x y) stack $ moves
+	print $ foldr (\x y -> head x : y) "" $ foldl applyMove stack moves
 
 	-- part 2
-	print $ foldr (\x y -> [(head x)] ++ y) "" $ foldl (\x y -> applyMove9001 x y) stack $ moves
+	print $ foldr (\x y -> head x : y) "" $ foldl applyMove9001 stack moves
 
 
 transposeString ([]:_) = []
-transposeString x = (map head x) : transposeString (map tail x)
+transposeString x = map head x : transposeString (map tail x)
 
 firstNonSpace :: String -> Char
 firstNonSpace (c:s)
-	| not (c == ' ') = c
+	| c /= ' ' = c
 	| otherwise = firstNonSpace s
 
 parseInput :: [String] -> ([String], [Move])
-parseInput inp = (parseStack (take ((length splS) - 1) splS) , (map parseMove splM))
+parseInput inp = (parseStack (take (length splS - 1) splS) , map parseMove splM)
 	where
 		splS:splM:_ = splitOn [""] inp
 
 parseStack :: [String] -> [String]
-parseStack xs = map (dropWhile isSpace) $ transposeString $ map (\x -> map snd $ (filter ((==1) . fst) (zip (cycle [0..3]) x))) $ xs
+parseStack xs = map (dropWhile isSpace) $ transposeString $ map (map snd . filter ((==1) . fst) . zip (cycle [0..3])) xs
 
 parseMove :: String -> Move
 parseMove s = Move (read $ ss !! 1) (read $ ss !! 3) (read $ ss !! 5)
@@ -39,10 +39,10 @@ parseMove s = Move (read $ ss !! 1) (read $ ss !! 3) (read $ ss !! 5)
 		ss = splitOn " " s
 
 stackPushS :: [String] -> Int -> String -> [String]
-stackPushS st i s = (take i st) ++ [(s ++ (st !! i))] ++ (drop (i + 1) st)
+stackPushS st i s = take i st ++ [s ++ (st !! i)] ++ drop (i + 1) st
 
 stackPopN :: [String] -> Int -> Int -> [String]
-stackPopN st i n = (take i st) ++ [drop n (st !! i)] ++ (drop (i + 1) st)
+stackPopN st i n = take i st ++ [drop n (st !! i)] ++ drop (i + 1) st
 
 applyMove :: [String] -> Move -> [String]
 applyMove xs (Move a b c) = stackPopN (stackPushS xs (c - 1) s) (b - 1) (length s)
