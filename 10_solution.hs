@@ -1,11 +1,9 @@
 {-# LANGUAGE ViewPatterns #-}
 import System.IO
 import Data.List (stripPrefix)
-import Debug.Trace
 
--- '/'
 main = do
-	input <- readFile "10_test.txt"
+	input <- readFile "10_input.txt"
 
 	-- part 1
 	print $ stateSum $ foldl parseCommand (State 1 1 []) $ lines input
