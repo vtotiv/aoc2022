@@ -3,7 +3,6 @@ import System.IO
 import Control.Monad
 import Data.List (stripPrefix, sortBy)
 import Data.List.Split (splitOn)
-import Debug.Trace
 import Data.Map (Map, empty, insertWith, foldr, filter, toList)
 import qualified Data.Map as Map
 
@@ -22,9 +21,6 @@ addIfr f x y
 	| f x = x + y
 	| otherwise = y
 
--- takes current path as list and Map of all directory sizes
--- a comman
--- and returns the updated path and Map
 parseCommand :: ([String], Map Int Int) -> String -> ([String], Map Int Int)
 parseCommand (path, m) (stripPrefix "$ cd /" -> Just str)= ([], m)
 parseCommand (path, m) (stripPrefix "$ cd .." -> Just str)= (tail path, insertWith (+) (key $ tail path) (Map.findWithDefault 0 (key path) m) m)
